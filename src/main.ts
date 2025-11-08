@@ -1,6 +1,6 @@
 import './style.scss';
 import * as THREE from "three/webgpu";
-import { uniform } from "three/tsl";
+import { color, pass } from "three/tsl";
 import { Inspector } from 'three/addons/inspector/Inspector.js';
 
 
@@ -16,8 +16,14 @@ async function mainAsync(){
   renderer.inspector = inspector;
   document.body.appendChild( renderer.domElement );
 
+  const postProcessing = new THREE.PostProcessing( renderer );
+  const scenePass = pass( scene, camera ).toInspector( 'Color' );
+  postProcessing.outputNode = scenePass;
+
   const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-  const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+  const material = new THREE.MeshBasicNodeMaterial();
+  material.colorNode = color(0x00ff00);
+
   const cube = new THREE.Mesh( geometry, material );
   scene.add( cube );
 
@@ -28,7 +34,7 @@ async function mainAsync(){
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
 
-    renderer.render( scene, camera );
+    postProcessing.render();
 
   }
 
