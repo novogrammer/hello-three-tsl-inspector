@@ -1,5 +1,7 @@
-import './style.scss'
-import * as THREE from "three/webgpu"
+import './style.scss';
+import * as THREE from "three/webgpu";
+import { uniform } from "three/tsl";
+import { Inspector } from 'three/addons/inspector/Inspector.js';
 
 
 async function mainAsync(){
@@ -10,6 +12,8 @@ async function mainAsync(){
   const renderer = new THREE.WebGPURenderer();
   renderer.setSize( window.innerWidth, window.innerHeight );
   renderer.setAnimationLoop( animate );
+  const inspector = new Inspector();
+  renderer.inspector = inspector;
   document.body.appendChild( renderer.domElement );
 
   const geometry = new THREE.BoxGeometry( 1, 1, 1 );
