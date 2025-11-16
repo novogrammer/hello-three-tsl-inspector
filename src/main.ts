@@ -15,6 +15,8 @@ async function mainAsync(){
   const inspector = new Inspector();
   renderer.inspector = inspector;
   document.body.appendChild( renderer.domElement );
+  // setAnimationLoopを使う場合init不要
+  // await renderer.init();
 
   const postProcessing = new THREE.PostProcessing( renderer );
   const scenePass = pass( scene, camera ).toInspector( 'Color' );
