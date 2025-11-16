@@ -37,6 +37,10 @@ async function mainAsync(){
   }
 
   const cube = new THREE.Mesh( geometry, material );
+  {
+    const rawShader = await renderer.debug.getShaderAsync( scene, camera, cube );
+    console.log(rawShader.fragmentShader);
+  }
   scene.add( cube );
 
   camera.position.z = 5;
