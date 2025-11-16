@@ -1,6 +1,6 @@
 import './style.scss';
 import * as THREE from "three/webgpu";
-import { color, convertToTexture, hue, pass, time, uv } from "three/tsl";
+import { color, convertToTexture, hue, pass, select, time, uv } from "three/tsl";
 import { Inspector } from 'three/addons/inspector/Inspector.js';
 
 
@@ -36,9 +36,10 @@ async function mainAsync(){
     const whiteTexture = convertToTextureIf(color(0xffffff)).toInspector("whiteTexture");
     const fromCenter = uv().sub(0.5).length().toVar("fromCenter");
     const colorNode = hue(color(0x0000ff),time.mul(3).add(fromCenter.mul(10))).toVar("colorNode");
+    const colorNodeWithAssert = select(fromCenter.greaterThan(0.5),color(0xff00ff),colorNode).toVar("colorNodeWithAssert");
     const colorTexture = convertToTextureIf(
       whiteTexture.mul(
-        colorNode
+        colorNodeWithAssert
       )
     ).toInspector("colorTexture");
     material.colorNode = colorTexture;
