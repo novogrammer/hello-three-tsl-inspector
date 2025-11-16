@@ -1,6 +1,6 @@
 import './style.scss';
 import * as THREE from "three/webgpu";
-import { color, pass } from "three/tsl";
+import { color, convertToTexture, hue, pass, time, uv } from "three/tsl";
 import { Inspector } from 'three/addons/inspector/Inspector.js';
 
 
@@ -24,7 +24,17 @@ async function mainAsync(){
 
   const geometry = new THREE.BoxGeometry( 1, 1, 1 );
   const material = new THREE.MeshBasicNodeMaterial();
-  material.colorNode = color(0x00ff00);
+  {
+    const whiteTexture = convertToTexture(color(0xffffff)).toInspector("whiteTexture");
+    const fromCenter = uv().sub(0.5).length();
+    const colorNode = hue(color(0x0000ff),time.mul(3).add(fromCenter.mul(10)));
+    const colorTexture = convertToTexture(
+      whiteTexture.mul(
+        colorNode
+      )
+    ).toInspector("colorTexture");
+    material.colorNode = colorTexture;
+  }
 
   const cube = new THREE.Mesh( geometry, material );
   scene.add( cube );
