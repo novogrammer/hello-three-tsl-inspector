@@ -24,11 +24,19 @@ async function mainAsync(){
 
   const geometry = new THREE.BoxGeometry( 1, 1, 1 );
   const material = new THREE.MeshBasicNodeMaterial();
+  const IS_DEBUG = true;
+  const convertToTextureIf = (node:THREE.Node)=>{
+    if(IS_DEBUG){
+      return convertToTexture(node);
+    }else{
+      return node;
+    }
+  };
   {
-    const whiteTexture = convertToTexture(color(0xffffff)).toInspector("whiteTexture");
-    const fromCenter = uv().sub(0.5).length();
-    const colorNode = hue(color(0x0000ff),time.mul(3).add(fromCenter.mul(10)));
-    const colorTexture = convertToTexture(
+    const whiteTexture = convertToTextureIf(color(0xffffff)).toInspector("whiteTexture");
+    const fromCenter = uv().sub(0.5).length().toVar("fromCenter");
+    const colorNode = hue(color(0x0000ff),time.mul(3).add(fromCenter.mul(10))).toVar("colorNode");
+    const colorTexture = convertToTextureIf(
       whiteTexture.mul(
         colorNode
       )
